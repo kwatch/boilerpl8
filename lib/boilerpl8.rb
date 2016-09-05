@@ -75,9 +75,9 @@ module Boilerpl8
     end
 
     INITIALIZER_SCRIPTS = [
-      ["__initialize.rb", "ruby"  ],
-      ["__initialize.py", "python"],
-      ["__initialize.sh", "bash"  ],
+      ["__init.rb", "ruby"  ],
+      ["__init.py", "python"],
+      ["__init.sh", "bash"  ],
     ]
 
     def err(msg)
@@ -127,13 +127,12 @@ module Boilerpl8
       api_url = "https://api.github.com/repos/#{user}/#{repo}/releases"
       json_str = open(api_url) {|f| f.read }
       json_arr = JSON.parse(json_str)
-      begin
-        asset = json_arr[0]["assets"][0]
-        zip_url = asset["browser_download_url"] || asset["zipball_url"]
-        return zip_url
-      rescue
+      asset = json_arr[0]["assets"][0]
+      zip_url = asset ? asset["browser_download_url"] \
+                      : json_arr[0]["zipball_url"]
+      zip_url  or
         err("ERROR: can't find zip file under github.com/#{user}/#{repo}/releases")
-      end
+      return zip_url
     end
 
   end
