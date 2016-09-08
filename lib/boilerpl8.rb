@@ -55,6 +55,7 @@ module Boilerpl8
           puts "$ rm -rf #{basedir}.tmp"
           FileUtils.rm_rf "#{basedir}.tmp"
         else
+          puts "$ mv #{basedir}.tmp #{basedir}"
           File.rename "#{basedir}.tmp", basedir
         end
       else
