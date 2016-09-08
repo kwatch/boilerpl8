@@ -26,11 +26,10 @@ module Boilerpl8
       raise NotImplementedError.new("#{self.class.name}#resolve(): not implemented yet.")
     end
 
-    def download(url)
+    def download(url, filename)
       print "Download from #{url} ..."
       content = open(url) {|f| f.read }
       puts " done."
-      filename = File.basename(url)
       File.open(filename, 'wb') {|f| f.write(content) }
       return filename
     end
@@ -47,8 +46,17 @@ module Boilerpl8
       #
       case filename
       when /\.zip\z/
-        puts "$ unzip -q -d #{basedir} #{filename}"
-        system "unzip -q -d #{basedir} #{filename}"
+        puts "$ unzip -q -d #{basedir}.tmp #{filename}"
+        system "unzip -q -d #{basedir}.tmp #{filename}"
+        paths = Dir.glob("#{basedir}.tmp/*")
+        if paths.length == 1 && File.directory?(paths[0])
+          puts "$ mv #{paths[0]} #{basedir}"
+          File.rename paths[0], basedir
+          puts "$ rm -rf #{basedir}.tmp"
+          FileUtils.rm_rf "#{basedir}.tmp"
+        else
+          File.rename "#{basedir}.tmp", basedir
+        end
       else
         puts "$ tar xf #{filename}"
         system "tar xf #{filename}"
@@ -107,7 +115,7 @@ module Boilerpl8
     def resolve(arg)
       arg =~ %r'\Afile:(.+)'  or err("#{arg}: unexpected format.")
       filepath = $1
-      return filepath
+      return filepath, File.basename(filepath)
     end
 
     def download(filepath)
@@ -127,12 +135,18 @@ module Boilerpl8
       api_url = "https://api.github.com/repos/#{user}/#{repo}/releases"
       json_str = open(api_url) {|f| f.read }
       json_arr = JSON.parse(json_str)
-      asset = json_arr[0]["assets"][0]
-      zip_url = asset ? asset["browser_download_url"] \
-                      : json_arr[0]["zipball_url"]
+      dict = json_arr[0]
+      asset = dict["assets"][0]
+      if asset
+        zip_url = asset["browser_download_url"]
+        filename = File.basename(zip_url) if zip_url
+      else
+        zip_url = dict["zipball_url"]
+        filename = "#{repo}_#{dict['tag_name']}.zip"
+      end
       zip_url  or
         err("ERROR: can't find zip file under github.com/#{user}/#{repo}/releases")
-      return zip_url
+      return zip_url, filename
     end
 
   end
@@ -160,8 +174,8 @@ module Boilerpl8
       #
       ! args.empty?  or err("#{script_name()}: argument required.")
       op = Operation.create(*args)
-      url = op.resolve(args[0])
-      filename = op.download(url)
+      url, filename = op.resolve(args[0])
+      op.download(url, filename)
       basedir = op.extract(filename, options['dir'])
       op.kick_initializer(basedir)
     end
