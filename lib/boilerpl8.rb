@@ -133,8 +133,18 @@ module Boilerpl8
     def resolve(arg)
       arg =~ %r'\Agithub:([^/]+)/([^/]+)\z'  or err("#{arg}: unexpected format.")
       user, repo = $1, $2
-      api_url = "https://api.github.com/repos/#{user}/#{repo}/releases"
-      json_str = open(api_url) {|f| f.read }
+      #
+      api_url = "https://api.github.com/repos/%s/%s/releases"
+      if repo.end_with?('-boilerpl8')
+        json_str = open(api_url % [user, repo]) {|f| f.read }
+      else
+        begin
+          json_str = open(api_url % [user, repo+"-boilerpl8"]) {|f| f.read }
+        rescue
+          json_str = open(api_url % [user, repo]) {|f| f.read }
+        end
+      end
+      #
       json_arr = JSON.parse(json_str)
       dict = json_arr[0]
       asset = dict["assets"][0]
