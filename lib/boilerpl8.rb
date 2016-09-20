@@ -119,7 +119,7 @@ module Boilerpl8
       return filepath, File.basename(filepath)
     end
 
-    def download(filepath)
+    def download(filepath, filename)
       return filepath
     end
 
@@ -176,8 +176,8 @@ module Boilerpl8
       ! args.empty?  or err("#{script_name()}: argument required.")
       op = Operation.create(*args)
       url, filename = op.resolve(args[0])
-      op.download(url, filename)
-      basedir = op.extract(filename, options['dir'])
+      filepath = op.download(url, filename)
+      basedir = op.extract(filepath, options['dir'])
       op.kick_initializer(basedir)
     end
 
