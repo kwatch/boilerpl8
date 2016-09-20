@@ -187,7 +187,7 @@ module Boilerpl8
       op = Operation.create(*args)
       url, filename = op.resolve(args[0])
       filepath = op.download(url, filename)
-      basedir = op.extract(filepath, options['dir'])
+      basedir = op.extract(filepath, args[1])
       op.kick_initializer(basedir)
     end
 
@@ -201,8 +201,8 @@ module Boilerpl8
 #{script} -- download boilerplate files
 
 Usage:
-  #{script} [options] github:<USER>/<PROJECT>
-  #{script} [options] file:<PATH>
+  #{script} [options] github:<USER>/<PROJECT> <DIR>
+  #{script} [options] file:<PATH> <DIR>
 
 Options:
 END
@@ -214,10 +214,13 @@ END
 Examples:
 
   ## download boilerplate files from github
-  $ #{script} github:h5bp/html5-boilerplate
+  $ #{script} github:h5bp/html5-boilerplate website1    # for html5
+  $ #{script} github:h5bp/hello-ruby mygem1             # for ruby
+  $ #{script} github:h5bp/hello-python mypkg1           # for python
+  $ #{script} github:kwatch/keight-ruby myapp1          # for keight.rb
 
   ## expand boilerplate files
-  $ #{script} file:./keight-ruby.tar.gz
+  $ #{script} file:./keight-ruby.tar.gz myapp1
 
 END
     end
@@ -227,7 +230,6 @@ END
     COMMAND_OPTIONS = [
       "-h, --help       :  help",
       "-v, --version    :  version",
-      "-d, --dir=name   :  directory name",
     ]
 
     def err(msg)
