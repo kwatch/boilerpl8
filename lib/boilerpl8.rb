@@ -84,9 +84,14 @@ module Boilerpl8
     end
 
     INITIALIZER_SCRIPTS = [
-      ["__init.rb", "ruby"  ],
-      ["__init.py", "python"],
-      ["__init.sh", "bash"  ],
+      ["__init.rb"   , "ruby"  ],
+      ["__init.py"   , "python"],
+      ["__init.js"   , "node"  ],
+      ["__init.pl"   , "perl"  ],
+      ["__init.php"  , "php"   ],
+      ["__init.lua"  , "lua"   ],
+      ["__init.exs"  , "elixir"],
+      ["__init.sh"   , "bash"  ],
     ]
 
     def err(msg)
