@@ -95,16 +95,16 @@ class Operation(object):
                 break
 
     @classmethod
-    def create(cls, *args):
-        m = re.match(r'^(\w+:)', args[0])
+    def create(cls, boilerplate_name):
+        m = re.match(r'^(\w+:)', boilerplate_name)
         if not m:
-            raise _err("%s: expected 'github:' or 'file:' schema." % args[0])
+            raise _err("%s: expected 'github:' or 'file:' schema." % boilerplate_name)
         schema = m.group(1)
         for klass in Operation.__subclasses__():
             if klass.SCHEMA == schema:
                 break
         else:
-            raise _err("%s: unknown schema." % args[0])
+            raise _err("%s: unknown schema." % boilerplate_name)
         return klass()
 
 
@@ -212,7 +212,8 @@ class MainApp(object):
         #
         if not args:
             raise _err("%s: argument required." % self.script_name)
-        op = Operation.create(*args)
+        boilerplate_name = args[0]
+        op = Operation.create(boilerplate_name)
         url, filename = op.resolve(args[0], options)
         filepath = op.download(url, filename)
         basedir = op.extract(filepath, (args[1] if len(args) >= 2 else None))
