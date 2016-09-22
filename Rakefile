@@ -70,10 +70,9 @@ task :release => :package do
   spec = load_gemspec_file(SPECFILE)
   release = spec.version
   print "*** Are you sure to upload #{PROJECT}-#{release}.gem? [y/N]: "
-  answer = gets().strip()
+  answer = $stdin.gets().strip()
   if answer =~ /\A[yY]/
-    #sh "git tag v#{release}"
-    sh "git tag release-#{release}"
+    #sh "git tag ruby-#{release}"
     sh "gem push #{PROJECT}-#{release}.gem"
   end
 end
