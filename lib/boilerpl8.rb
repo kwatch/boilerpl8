@@ -34,6 +34,12 @@ module Boilerpl8
       system command
     end
 
+    def chdir(dir, &block)
+      puts "$ cd #{dir}"
+      Dir.chdir(dir, &block)
+      puts "$ cd -"
+    end
+
   end
 
 
@@ -99,17 +105,14 @@ module Boilerpl8
     end
 
     def kick_initializer(basedir)
-      puts "$ cd #{basedir}"
-      Dir.chdir(basedir) do
+      chdir(basedir) do
         INITIALIZER_SCRIPTS.each do |script, lang|
           if File.exist?(script)
-            puts "$ #{lang} #{script}"
-            system "#{lang} #{script}"
+            sys "#{lang} #{script}"
             break
           end
         end
       end
-      puts "$ cd -"
     end
 
     def err(msg)
