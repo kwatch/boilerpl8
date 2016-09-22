@@ -93,6 +93,7 @@ def edit(*filepaths)
         f.rewind()
         f.truncate(0)
         f.write(new_s)
+        puts "[Change] #{fpath}"
       end
     end
   end
