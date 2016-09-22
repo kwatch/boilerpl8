@@ -40,7 +40,7 @@ howto_release = r"""
 
 
 @recipe
-def howto(c):
+def task_howto(c):
     """show how to release"""
     print("How to release:")
     print("")
@@ -49,7 +49,7 @@ def howto(c):
 
 @recipe
 @spices("-a: run test on Python 2.x and 3.x")
-def test(c, *args, **kwargs):
+def task_test(c, *args, **kwargs):
     """do test"""
     if 'a' in kwargs:
         for pyver in python_versions:
@@ -96,7 +96,7 @@ def task_edit(c, *args):
 
 @recipe
 @ingreds('manifest')
-def package(c):
+def task_package(c):
     """create packages"""
     #rm_rf("dist/*")
     system(c%'$(python) setup.py -q sdist')
@@ -104,7 +104,7 @@ def package(c):
 
 @recipe
 @ingreds('package')
-def publish(c):
+def task_publish(c):
     """upload new version to pypi"""
     sys.stdout.write("** Are you sure to upload %s-%s.tar.gz? [y/N]: " % (package, release))
     answer = sys.stdin.readline().strip()
