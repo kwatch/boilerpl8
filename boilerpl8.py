@@ -48,6 +48,18 @@ def chdir(dir):
         os.chdir(pwd)
 
 
+INITIALIZER_SCRIPTS = [
+    ("__init.rb"   , "ruby"  ),
+    ("__init.py"   , "python"),
+    ("__init.js"   , "node"  ),
+    ("__init.pl"   , "perl"  ),
+    ("__init.php"  , "php"   ),
+    ("__init.lua"  , "lua"   ),
+    ("__init.exs"  , "elixir"),
+    ("__init.sh"   , "bash"  ),
+]
+
+
 class Operation(object):
 
     def do_everything(self, boilerplate_name, target_dir, options):
@@ -167,18 +179,6 @@ class GithubOp(Operation):
         if not zip_url:
             raise _err("ERROR: can't find zip file under github.com/%s/%s/releases" % (user, repo))
         return zip_url, filename
-
-
-INITIALIZER_SCRIPTS = [
-    ("__init.rb"   , "ruby"  ),
-    ("__init.py"   , "python"),
-    ("__init.js"   , "node"  ),
-    ("__init.pl"   , "perl"  ),
-    ("__init.php"  , "php"   ),
-    ("__init.lua"  , "lua"   ),
-    ("__init.exs"  , "elixir"),
-    ("__init.sh"   , "bash"  ),
-]
 
 
 class MainApp(object):
