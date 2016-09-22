@@ -110,7 +110,7 @@ class Operation(object):
             for script, lang in INITIALIZER_SCRIPTS:
                 if os.path.isfile(script):
                     system(" %s %s" % (lang, script))
-                break
+                    break
 
     @classmethod
     def create(cls, boilerplate_name):
