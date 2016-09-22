@@ -173,7 +173,17 @@ module Boilerpl8
   end
 
 
-  class App
+  class MainApp
+
+    def self.main
+      begin
+        self.new.run(*ARGV)
+        exit 0
+      rescue CommandOptionError => ex
+        $stderr.puts ex.message
+        exit 1
+      end
+    end
 
     def run(*args)
       parser = CommandOptionParser.new(COMMAND_OPTIONS)
@@ -317,21 +327,6 @@ END
 
     def err(msg)
       raise CommandOptionError.new(msg)
-    end
-
-  end
-
-
-  class Main
-
-    def self.main
-      begin
-        App.new.run(*ARGV)
-        exit 0
-      rescue CommandOptionError => ex
-        $stderr.puts ex.message
-        exit 1
-      end
     end
 
   end

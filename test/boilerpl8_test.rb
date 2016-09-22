@@ -9,7 +9,7 @@ require 'fileutils'
 require_relative '../lib/boilerpl8'
 
 
-describe Boilerpl8::App do
+describe Boilerpl8::MainApp do
 
   help_message = <<END
 #{File.basename(__FILE__)} -- download boilerplate files
@@ -44,12 +44,12 @@ END
       expected = help_message
       #
       status = nil
-      pr = proc { status = Boilerpl8::App.new.run("-hv") }
+      pr = proc { status = Boilerpl8::MainApp.new.run("-hv") }
       ok {pr}.output?(expected)
       ok {status} == 0
       #
       status = nil
-      pr = proc { status = Boilerpl8::App.new.run("--help", "foo", "bar") }
+      pr = proc { status = Boilerpl8::MainApp.new.run("--help", "foo", "bar") }
       ok {pr}.output?(expected)
       ok {status} == 0
     end
@@ -58,12 +58,12 @@ END
       expected = "#{Boilerpl8::RELEASE}\n"
       #
       status = nil
-      pr = proc { status = Boilerpl8::App.new.run("-v") }
+      pr = proc { status = Boilerpl8::MainApp.new.run("-v") }
       ok {pr}.output?(expected)
       ok {status} == 0
       #
       status = nil
-      pr = proc { status = Boilerpl8::App.new.run("--version", "foo", "bar") }
+      pr = proc { status = Boilerpl8::MainApp.new.run("--version", "foo", "bar") }
       ok {pr}.output?(expected)
       ok {status} == 0
     end
@@ -71,7 +71,7 @@ END
     it "downloads and expand github:kwatch/hello-ruby" do
       target_dir = "test-app1"
       begin
-        status = Boilerpl8::App.new.run("github:kwatch/hello-ruby", target_dir)
+        status = Boilerpl8::MainApp.new.run("github:kwatch/hello-ruby", target_dir)
         ok {target_dir}.dir_exist?
         ok {"#{target_dir}/#{target_dir}.gemspec"}.file_exist?
         ok {"#{target_dir}/hello.gemspec"}.NOT.file_exist?
@@ -86,7 +86,7 @@ END
     it "downloads and expand with '-B' option" do
       target_dir = "test-site1"
       begin
-        status = Boilerpl8::App.new.run("-B", "github:h5bp/html5-boilerplate", target_dir)
+        status = Boilerpl8::MainApp.new.run("-B", "github:h5bp/html5-boilerplate", target_dir)
         ok {target_dir}.dir_exist?
         ok {status} == 0
       ensure
