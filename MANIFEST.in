@@ -1,0 +1,4 @@
+include README.md MIT-LICENSE setup.py Kookbook.py
+include boilerpl8.py
+include bin/boilerpl8
+include tests/*.py
