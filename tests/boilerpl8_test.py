@@ -41,7 +41,7 @@ Examples:
 """[1:].format(script="boilerpl8")
 
     def provide_app(self):
-        return boilerpl8.App("boilerpl8")
+        return boilerpl8.MainApp("boilerpl8")
 
 
     @test("prints help message when '-h' or '--help' specified.")

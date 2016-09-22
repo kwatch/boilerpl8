@@ -175,13 +175,24 @@ INITIALIZER_SCRIPTS = [
 ]
 
 
-class App(object):
+class MainApp(object):
 
     COMMAND_OPTIONS = [
         "-h, --help       :  help",
         "-v, --version    :  version",
         "-B               :  not append '-boilerpl8' to github repo name",
     ]
+
+    @classmethod
+    def main(cls):
+        script_name = os.path.basename(sys.argv[0])
+        args = sys.argv[1:]
+        try:
+            status = cls(script_name).run(*args)
+        except CommandOptionError as ex:
+            sys.stderr.write("%s\n" % (ex,))
+            status = 1
+        sys.exit(status)
 
     def __init__(self, script_name):
         self.script_name = script_name
@@ -332,16 +343,5 @@ class CommandOptionParser(object):
         return None
 
 
-def main():
-    script_name = os.path.basename(sys.argv[0])
-    args = sys.argv[1:]
-    try:
-        status = App(script_name).run(*args)
-    except CommandOptionError as ex:
-        sys.stderr.write("%s\n" % (ex,))
-        status = 1
-    sys.exit(status)
-
-
 if __name__ == '__main__':
-    main()
+    MainApp.main()
