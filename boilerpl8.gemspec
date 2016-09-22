@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name            = 'boilerpl8'
-  spec.version         = '$Release: 0.1.0 $'.split()[1]
+  spec.version         = '$Release: 0.0.0 $'.split()[1]
   spec.author          = 'makoto kuwata'
   spec.email           = 'kwa@kuwata-lab.com'
   spec.platform        = Gem::Platform::RUBY
@@ -23,6 +23,6 @@ END
   spec.require_path    = 'lib'
   spec.test_files      = Dir['test/**/*_test.rb']
 
-  spec.add_development_dependency 'minitest'
-  spec.add_development_dependency 'minitest-ok'
+  spec.add_development_dependency 'minitest'   , '~> 0'
+  spec.add_development_dependency 'minitest-ok', '~> 0'
 end
