@@ -203,6 +203,12 @@ module Boilerpl8
 
   class MainApp
 
+    COMMAND_OPTIONS = [
+      "-h, --help       :  help",
+      "-v, --version    :  version",
+      "-B               :  not append '-boilerpl8' to github repo name",
+    ]
+
     def self.main
       begin
         self.new.run(*ARGV)
@@ -272,12 +278,6 @@ END
     end
 
     private
-
-    COMMAND_OPTIONS = [
-      "-h, --help       :  help",
-      "-v, --version    :  version",
-      "-B               :  not append '-boilerpl8' to github repo name",
-    ]
 
     def err(msg)
       raise CommandOptionError.new(msg)
