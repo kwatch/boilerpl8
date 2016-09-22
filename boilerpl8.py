@@ -108,7 +108,7 @@ class Operation(object):
         return klass()
 
 
-class FileSystemOperation(Operation):
+class FileSystemOp(Operation):
 
     SCHEMA = "file:"
 
@@ -123,7 +123,7 @@ class FileSystemOperation(Operation):
         return filepath
 
 
-class GithubOperation(Operation):
+class GithubOp(Operation):
 
     SCHEMA = "github:"
 
