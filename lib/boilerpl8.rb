@@ -22,7 +22,7 @@ module Boilerpl8
 
   class Operation
 
-    def resolve(arg)
+    def resolve(arg, options)
       raise NotImplementedError.new("#{self.class.name}#resolve(): not implemented yet.")
     end
 
@@ -118,7 +118,7 @@ module Boilerpl8
 
     SCHEMA = "file:"
 
-    def resolve(arg)
+    def resolve(arg, options)
       arg =~ %r'\Afile:(.+)'  or err("#{arg}: unexpected format.")
       filepath = $1
       return filepath, File.basename(filepath)
@@ -135,19 +135,19 @@ module Boilerpl8
 
     SCHEMA = "github:"
 
-    def resolve(arg)
+    def resolve(arg, options)
       arg =~ %r'\Agithub:([^/]+)/([^/]+)\z'  or err("#{arg}: unexpected format.")
       user, repo = $1, $2
       #
-      api_url = "https://api.github.com/repos/%s/%s/releases"
-      if repo.end_with?('-boilerpl8')
-        json_str = open(api_url % [user, repo]) {|f| f.read }
-      else
-        begin
-          json_str = open(api_url % [user, repo+"-boilerpl8"]) {|f| f.read }
-        rescue
-          json_str = open(api_url % [user, repo]) {|f| f.read }
-        end
+      suffix = options['B'] ? "" : "-boilerpl8"
+      api_url = "https://api.github.com/repos/#{user}/#{repo}#{suffix}/releases"
+      begin
+        json_str = open(api_url) {|f| f.read }
+      rescue OpenURI::HTTPError => ex
+        hint = options['B'] \
+             ? "confirm repository name, or try without '-B' option." \
+             : "confirm repository name, or maybe you missed '-B' option."
+        err("#{arg}: repository not found\n  (api: GET #{api_url})\n  (Hint: #{hint})")
       end
       #
       json_arr = JSON.parse(json_str)
@@ -190,7 +190,7 @@ module Boilerpl8
       #
       ! args.empty?  or err("#{script_name()}: argument required.")
       op = Operation.create(*args)
-      url, filename = op.resolve(args[0])
+      url, filename = op.resolve(args[0], options)
       filepath = op.download(url, filename)
       basedir = op.extract(filepath, args[1])
       op.kick_initializer(basedir)
@@ -235,6 +235,7 @@ END
     COMMAND_OPTIONS = [
       "-h, --help       :  help",
       "-v, --version    :  version",
+      "-B               :  not append '-boilerpl8' to github repo name",
     ]
 
     def err(msg)
