@@ -11,9 +11,6 @@ require 'json'
 require 'fileutils'
 
 
-###
-###
-###
 module Boilerpl8
 
 
@@ -361,5 +358,5 @@ end
 
 
 if __FILE__ == $0
-  Boilerpl8::Main.main()
+  Boilerpl8::MainApp.main()
 end
