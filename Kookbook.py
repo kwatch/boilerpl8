@@ -111,7 +111,7 @@ def task_publish(c):
     if answer.startswith(('y', 'Y')):
         #rm_rf("dist/*")
         system(c%'$(python) setup.py register')
-        system(c%'$(python) setup.py upload')
+        system(c%'$(python) setup.py sdist upload')
 
 
 kookbook.load('@kook/books/clean.py')
