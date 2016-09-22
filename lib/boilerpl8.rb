@@ -101,6 +101,7 @@ module Boilerpl8
         sys "tar xf #{filename}"
         mv base, basedir if base != basedir
       end
+      #
       return basedir
     end
 
@@ -185,10 +186,10 @@ module Boilerpl8
       #
       json_arr = JSON.parse(json_str)
       dict = json_arr[0]
-      asset = dict["assets"][0]
+      asset = (dict["assets"] || [])[0]
       if asset
         zip_url = asset["browser_download_url"]
-        filename = File.basename(zip_url) if zip_url
+        filename = zip_url ? File.basename(zip_url) : nil
       else
         zip_url = dict["zipball_url"]
         filename = "#{repo}_#{dict['tag_name']}.zip"
@@ -256,9 +257,7 @@ Usage:
 
 Options:
 END
-      COMMAND_OPTIONS.each do |s|
-        buf << "  #{s}\n"
-      end
+      COMMAND_OPTIONS.each {|s| buf << "  #{s}\n" }
       buf << <<"END"
 
 Examples:
