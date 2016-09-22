@@ -6,10 +6,10 @@ Gem::Specification.new do |spec|
   spec.author          = 'makoto kuwata'
   spec.email           = 'kwa@kuwata-lab.com'
   spec.platform        = Gem::Platform::RUBY
-  spec.homepage        = 'https://github.com/kwatch/boilerpl8'
+  spec.homepage        = 'https://github.com/kwatch/boilerpl8/tree/ruby'
   spec.summary         = "download and expand boilerplate files"
   spec.description     = <<-'END'
-Small utility to download and expand boilerplate files.
+Scaffolding tool to download and expand boilerplate files.
 END
   spec.license         = 'MIT'
   spec.files           = Dir[*%w[
