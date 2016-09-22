@@ -49,9 +49,7 @@ end
 desc "update release number"
 task :prepare do
   release = release_number_required(:prepare)
-  edit(SPECFILE) {|s|
-    s.sub(/(spec\.version[ \t]*=)[ \t]*('.*?'|".*?")/, "\\1 '#{release}'")
-  }
+  spec = load_gemspec_file(SPECFILE)
   edit(spec.files) {|s|
     s.gsub(/\$(Release):.*?\$/,   "$Release\: #{release} $") \
      .gsub(/\$(Release)$/,        release)
