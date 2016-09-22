@@ -22,6 +22,25 @@ module Boilerpl8
 
   class Operation
 
+    private
+
+    def rm_rf(path)
+      puts "$ rm -rf #{path}"
+      FileUtils.rm_rf path
+    end
+
+    def mv(oldpath, newpath)
+      puts "$ mv #{oldpath} #{newpath}"
+      File.rename oldpath, newpath
+    end
+
+    def sys(command)
+      puts "$ #{command}"
+      system command
+    end
+
+    public
+
     def resolve(arg, options)
       raise NotImplementedError.new("#{self.class.name}#resolve(): not implemented yet.")
     end
@@ -39,32 +58,22 @@ module Boilerpl8
         err("#{filename}: expected '*.zip' or '*.tar.gz'")
       base = File.basename($`)
       basedir ||= base
-      if File.exist?(basedir)
-        puts "$ rm -rf #{basedir}"
-        FileUtils.rm_rf(basedir)
-      end
+      rm_rf basedir if File.exist?(basedir)
       #
       case filename
       when /\.zip\z/
-        puts "$ unzip -q -d #{basedir}.tmp #{filename}"
-        system "unzip -q -d #{basedir}.tmp #{filename}"
-        paths = Dir.glob("#{basedir}.tmp/*")
+        tmpdir = basedir + ".tmp"
+        sys "unzip -q -d #{tmpdir} #{filename}"
+        paths = Dir.glob("#{tmpdir}/*")
         if paths.length == 1 && File.directory?(paths[0])
-          puts "$ mv #{paths[0]} #{basedir}"
-          File.rename paths[0], basedir
-          puts "$ rm -rf #{basedir}.tmp"
-          FileUtils.rm_rf "#{basedir}.tmp"
+          mv paths[0], basedir
+          rm_rf tmpdir
         else
-          puts "$ mv #{basedir}.tmp #{basedir}"
-          File.rename "#{basedir}.tmp", basedir
+          mv tmpdir, basedir
         end
       else
-        puts "$ tar xf #{filename}"
-        system "tar xf #{filename}"
-        if base != basedir
-          puts "$ mv #{base} #{basedir}"
-          File.rename base, basedir
-        end
+        sys "tar xf #{filename}"
+        mv base, basedir if base != basedir
       end
       return basedir
     end
