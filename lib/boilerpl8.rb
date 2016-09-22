@@ -258,12 +258,19 @@ END
       @optdef_strs = optdef_strs
       @optdefs = []
       optdef_strs.each do |optdef_str|
-        optdef_str =~ /-(\w), --(\w+)(?:=(\S+))?\s*:\s*(\S.*)?/  or
+        case optdef_str
+        when /-(\w), --(\w[-\w]*)(?:=(\S+))?\s*:\s*(\S.*)?/ ; t = [$1, $2, $3, $4]
+        when /-(\w)(?:\s+(\S+))?\s*:\s*(\S.*)?/             ; t = [$1, nil, $2, $3]
+        when /--(\w[-\w]*)(?:=(\S+))?\s*:\s*(\S.*)?/        ; t = [nil, $1, $2, $3]
+        else
           raise "unexpected option definition: #{optdef_str}"
-        short, long, param, desc = $1, $2, $3, $4
+        end
+        short, long, param, desc = t
         @optdefs << CommandOptionDefinition.new(short, long, param, desc)
       end
     end
+
+    attr_reader :optdefs
 
     def parse(args)
       options = {}
