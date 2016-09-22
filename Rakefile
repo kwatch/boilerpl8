@@ -16,12 +16,14 @@ task :howto do
   puts <<'END'
 How to release:
 
-  $ git diff                 # confirm that no diff
+  $ git diff                     # confirm that no diff
   $ rake test
-  $ rake prepare rel=0.0.0   # update release number
+  $ rake prepare release=0.0.0   # update release number
   $ rake package
   $ rake release
-  $ git checkout .           # reset release number
+  $ git checkout .               # reset release number
+  $ git tag ruby-0.0.0
+  $ git push --tags
 
 END
 end
