@@ -168,8 +168,9 @@ module Boilerpl8
   end
 
 
-  Operation::ALL[FileSystemOperation::SCHEMA] = FileSystemOperation
-  Operation::ALL[GithubOperation::SCHEMA    ] = GithubOperation
+  [FileSystemOperation, GithubOperation].each do |cls|
+    Operation::ALL[cls.const_get(:SCHEMA)] = cls
+  end
 
 
   class App
