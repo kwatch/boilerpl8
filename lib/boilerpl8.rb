@@ -194,6 +194,7 @@ module Boilerpl8
       filepath = op.download(url, filename)
       basedir = op.extract(filepath, args[1])
       op.kick_initializer(basedir)
+      return 0
     end
 
     def script_name
