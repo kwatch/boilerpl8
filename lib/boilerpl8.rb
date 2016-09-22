@@ -206,7 +206,7 @@ module Boilerpl8
 #{script} -- download boilerplate files
 
 Usage:
-  #{script} [options] github:<USER>/<PROJECT> <DIR>
+  #{script} [options] github:<USER>/<REPO> <DIR>
   #{script} [options] file:<PATH> <DIR>
 
 Options:
@@ -219,10 +219,12 @@ END
 Examples:
 
   ## download boilerplate files from github
-  $ #{script} github:h5bp/html5-boilerplate website1    # for html5
-  $ #{script} github:h5bp/hello-ruby mygem1             # for ruby
-  $ #{script} github:h5bp/hello-python mypkg1           # for python
-  $ #{script} github:kwatch/keight-ruby myapp1          # for keight.rb
+  $ #{script} github:kwatch/hello-ruby mygem1             # for ruby
+  $ #{script} github:kwatch/hello-python mypkg1           # for python
+  $ #{script} github:kwatch/keight-ruby myapp1            # for keight.rb
+
+  ## '-B' option doesn't append '-boilerpl8' to github repo name
+  $ #{script} -B github:h5bp/html5-boilerplate website1   # for html5
 
   ## expand boilerplate files
   $ #{script} file:./keight-ruby.tar.gz myapp1
