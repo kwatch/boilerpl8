@@ -41,6 +41,15 @@ module Boilerpl8
 
     public
 
+    def do_everything(boilerplate_name, target_dir, options)
+      url, filename = resolve(boilerplate_name, options)
+      filepath = download(url, filename)
+      basedir = extract(filepath, target_dir)
+      kick_initializer(basedir)
+    end
+
+    protected
+
     def resolve(arg, options)
       raise NotImplementedError.new("#{self.class.name}#resolve(): not implemented yet.")
     end
@@ -111,6 +120,8 @@ module Boilerpl8
       raise CommandOptionError.new(msg)
     end
 
+    public
+
     ALL = {}
 
     def self.create(*args)
@@ -126,6 +137,8 @@ module Boilerpl8
   class FileSystemOperation < Operation
 
     SCHEMA = "file:"
+
+    protected
 
     def resolve(arg, options)
       arg =~ %r'\Afile:(.+)'  or err("#{arg}: unexpected format.")
@@ -143,6 +156,8 @@ module Boilerpl8
   class GithubOperation < Operation
 
     SCHEMA = "github:"
+
+    protected
 
     def resolve(arg, options)
       arg =~ %r'\Agithub:([^/]+)/([^/]+)\z'  or err("#{arg}: unexpected format.")
@@ -209,11 +224,10 @@ module Boilerpl8
       end
       #
       ! args.empty?  or err("#{script_name()}: argument required.")
-      op = Operation.create(*args)
-      url, filename = op.resolve(args[0], options)
-      filepath = op.download(url, filename)
-      basedir = op.extract(filepath, args[1])
-      op.kick_initializer(basedir)
+      boilerplate_name = args[0]   # ex: "github:kwatch/hello-ruby"
+      target_dir       = args[1]   # ex: "mygem1"
+      op = Operation.create(boilerplate_name)
+      op.do_everything(boilerplate_name, target_dir, options)
       return 0
     end
 
