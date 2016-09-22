@@ -94,16 +94,16 @@ class Operation(object):
                     system(" %s %s" % (lang, script))
                 break
 
-    ALL = {}
-
     @classmethod
     def create(cls, *args):
         m = re.match(r'^(\w+:)', args[0])
         if not m:
             raise _err("%s: expected 'github:' or 'file:' schema." % args[0])
         schema = m.group(1)
-        klass = cls.ALL.get(schema)
-        if klass is None:
+        for klass in Operation.__subclasses__():
+            if klass.SCHEMA == schema:
+                break
+        else:
             raise _err("%s: unknown schema." % args[0])
         return klass()
 
@@ -161,10 +161,6 @@ class GithubOperation(Operation):
         if not zip_url:
             raise _err("ERROR: can't find zip file under github.com/%s/%s/releases" % (user, repo))
         return zip_url, filename
-
-
-for cls in (FileSystemOperation, GithubOperation):
-    Operation.ALL[cls.SCHEMA] = cls
 
 
 INITIALIZER_SCRIPTS = [
