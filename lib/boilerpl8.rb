@@ -20,9 +20,7 @@ module Boilerpl8
   RELEASE = '$Release: 0.0.0 $'.split()[1]
 
 
-  class Operation
-
-    private
+  module ShellHelper
 
     def rm_rf(path)
       puts "$ rm -rf #{path}"
@@ -39,7 +37,11 @@ module Boilerpl8
       system command
     end
 
-    public
+  end
+
+
+  class Operation
+    include ShellHelper
 
     def do_everything(boilerplate_name, target_dir, options)
       url, filename = resolve(boilerplate_name, options)
