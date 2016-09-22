@@ -122,17 +122,18 @@ module Boilerpl8
 
     public
 
-    ALL = {}
+    ALL = []
 
-    def self.register(klass)
-      ALL[klass.const_get(:SCHEMA)] = klass
+    def self.inherited(klass)
+      ALL << klass
     end
 
     def self.create(boilerplate_name)
-      name = boilerplate_name
-      name =~ /\A(\w+:)/     or err("#{args[0]}: expected 'github:' or 'file:' schema.")
+      boilerplate_name =~ /\A(\w+:)/  or
+        err("#{args[0]}: expected 'github:' or 'file:' schema.")
       schema = $1
-      klass = ALL[schema]    or err("#{args[0]}: unknown schema.")
+      klass = ALL.find {|cls| cls.const_get(:SCHEMA) == schema }  or
+        err("#{args[0]}: unknown schema.")
       return klass.new()
     end
 
@@ -156,7 +157,6 @@ module Boilerpl8
     end
 
   end
-  Operation.register(FileSystemOp)
 
 
   class GithubOp < Operation
@@ -196,7 +196,6 @@ module Boilerpl8
     end
 
   end
-  Operation.register(GithubOp)
 
 
   class MainApp
