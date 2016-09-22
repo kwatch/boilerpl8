@@ -211,6 +211,10 @@ module Boilerpl8
       end
     end
 
+    def initialize(script_name=nil)
+      @script_name = script_name || File.basename($0)
+    end
+
     def run(*args)
       parser = CommandOptionParser.new(COMMAND_OPTIONS)
       options = parser.parse(args)
@@ -225,7 +229,7 @@ module Boilerpl8
         return 0
       end
       #
-      ! args.empty?  or err("#{script_name()}: argument required.")
+      ! args.empty?  or err("#{@script_name}: argument required.")
       boilerplate_name = args[0]   # ex: "github:kwatch/hello-ruby"
       target_dir       = args[1]   # ex: "mygem1"
       op = Operation.create(boilerplate_name)
@@ -233,12 +237,8 @@ module Boilerpl8
       return 0
     end
 
-    def script_name
-      return File.basename($0)
-    end
-
     def help_message
-      script = script_name()
+      script = @script_name
       buf = <<"END"
 #{script} -- download boilerplate files
 
