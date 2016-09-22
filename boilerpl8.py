@@ -254,14 +254,12 @@ Examples:
         return "".join(buf).format(script=self.script_name)
 
 
-
 class CommandOptionError(Exception):
     pass
 
 
 def _err(msg):
     raise CommandOptionError(msg)
-
 
 
 class CommandOptionDefinition(object):
