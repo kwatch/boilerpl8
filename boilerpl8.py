@@ -50,6 +50,12 @@ def chdir(dir):
 
 class Operation(object):
 
+    def do_everything(self, boilerplate_name, target_dir, options):
+        url, filename = self.resolve(boilerplate_name, options)
+        filepath = self.download(url, filename)
+        basedir = self.extract(filepath, target_dir)
+        self.kick_initializer(basedir)
+
     def resolve(self, arg, options):
         raise NotImplementedError("%s.resolve(): not implemented yet." % self.__class__.__name__)
 
@@ -213,11 +219,9 @@ class MainApp(object):
         if not args:
             raise _err("%s: argument required." % self.script_name)
         boilerplate_name = args[0]
+        target_dir       = (args[1] if len(args) >= 2 else None)
         op = Operation.create(boilerplate_name)
-        url, filename = op.resolve(args[0], options)
-        filepath = op.download(url, filename)
-        basedir = op.extract(filepath, (args[1] if len(args) >= 2 else None))
-        op.kick_initializer(basedir)
+        op.do_everything(boilerplate_name, target_dir, options)
         return 0
 
     def help_message(self):
