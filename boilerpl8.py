@@ -14,6 +14,7 @@ assert PY2 or PY3
 import json
 import shutil
 from glob import glob
+from contextlib import contextmanager
 if PY2:
     from urllib2 import urlopen
 elif PY3:
@@ -21,6 +22,30 @@ elif PY3:
 
 
 __release__ = '$Release: 0.0.0 $'.split()[1]
+
+
+def rm_rf(path):
+    print("$ rm -rf %s" % path)
+    shutil.rmtree(path)
+
+def mv(oldpath, newpath):
+    print("$ mv %s %s" % (oldpath, newpath))
+    os.rename(oldpath, newpath)
+
+def system(command):
+    print("$ %s" % command)
+    os.system(command)
+
+@contextmanager
+def chdir(dir):
+    pwd = os.getcwd()
+    print("$ %s" % dir)
+    os.chdir(dir)
+    try:
+        yield
+    finally:
+        print("$ cd -")
+        os.chdir(pwd)
 
 
 class Operation(object):
@@ -44,42 +69,30 @@ class Operation(object):
         base = filename[:m.start(0)]
         basedir = basedir or base
         if os.path.exists(basedir):
-            print("$ rm -rf %s" % basedir)
-            shutil.rmtree(basedir)
+            rm_rf(basedir)
         #
         if filename.endswith('.zip'):
-            print("$ unzip -q -d %s.tmp %s" % (basedir, filename))
-            os.system("unzip -q -d %s.tmp %s" % (basedir, filename))
-            paths = glob("%s.tmp/*" % basedir)
+            tmpdir = basedir + ".tmp"
+            system("unzip -q -d %s %s" % (tmpdir, filename))
+            paths = glob("%s/*" % tmpdir)
             if len(paths) == 1 and os.path.isdir(paths[0]):
-                print("$ mv %s %s" % (paths[0], basedir))
-                os.rename(paths[0], basedir)
-                print("$ rm -rf %s.tmp" % basedir)
-                shutil.rmtree("%s.tmp" % basedir)
+                mv(paths[0], basedir)
+                rm_rf(tmpdir)
             else:
-                print("$ mv %s.tmp %s" % (basedir, basedir))
-                os.rename("%s.tmp" % basedir, basedir)
+                mv(tmpdir, basedir)
         else:
-            print("$ tar xf %s" % filename)
-            os.system("tar xf %s" % filename)
+            system("tar xf %s" % filename)
             if base != basedir:
-                print("$ mv %s %s" % (base, basedir))
-                os.rename(base, basedir)
+                mv(base, basedir)
         #
         return basedir
 
     def kick_initializer(self, basedir):
-        print("$ cd %s" % basedir)
-        os.chdir(basedir)
-        try:
+        with chdir(basedir):
             for script, lang in INITIALIZER_SCRIPTS:
                 if os.path.isfile(script):
-                    print("$ %s %s" % (lang, script))
-                    os.system(" %s %s" % (lang, script))
+                    system(" %s %s" % (lang, script))
                 break
-        finally:
-            print("$ cd -")
-            os.chdir("..")
 
     ALL = {}
 
