@@ -37,6 +37,18 @@ module Boilerpl8
   end
 
 
+  INITIALIZER_SCRIPTS = [
+    ["__init.rb"   , "ruby"  ],
+    ["__init.py"   , "python"],
+    ["__init.js"   , "node"  ],
+    ["__init.pl"   , "perl"  ],
+    ["__init.php"  , "php"   ],
+    ["__init.lua"  , "lua"   ],
+    ["__init.exs"  , "elixir"],
+    ["__init.sh"   , "bash"  ],
+  ]
+
+
   class Operation
     include ShellHelper
 
@@ -99,17 +111,6 @@ module Boilerpl8
       end
       puts "$ cd -"
     end
-
-    INITIALIZER_SCRIPTS = [
-      ["__init.rb"   , "ruby"  ],
-      ["__init.py"   , "python"],
-      ["__init.js"   , "node"  ],
-      ["__init.pl"   , "perl"  ],
-      ["__init.php"  , "php"   ],
-      ["__init.lua"  , "lua"   ],
-      ["__init.exs"  , "elixir"],
-      ["__init.sh"   , "bash"  ],
-    ]
 
     def err(msg)
       raise CommandOptionError.new(msg)
