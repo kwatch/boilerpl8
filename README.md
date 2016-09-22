@@ -1,4 +1,3 @@
-=========
 Boilerpl8
 =========
 
@@ -9,6 +8,9 @@ Abount
 Boilerpl8 is a scaffolding tool to download and expand boilerplate files.
 
 Currently implemented in both Ruby and Python.
+
+* Ruby:   https://github.com/kwatch/boilerpl8/tree/ruby
+* Python: https://github.com/kwatch/boilerpl8/tree/python
 
 
 Install
