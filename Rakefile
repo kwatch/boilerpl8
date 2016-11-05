@@ -13,16 +13,19 @@ task :default => :howto
 
 desc "show how to release"
 task :howto do
-  puts <<'END'
+  rel = ENV['release'] || '0.0.0'
+  puts <<"END"
 How to release:
 
   $ git diff                     # confirm that no diff
   $ rake test
-  $ rake prepare release=0.0.0   # update release number
+  $ rake prepare release=#{rel}   # update release number
+  $ git add -p
+  $ git commit -m "ruby: release preparation for #{rel}"
   $ rake package
   $ rake release
   $ git checkout .               # reset release number
-  $ git tag ruby-0.0.0
+  $ git tag ruby-#{rel}
   $ git push --tags
 
 END
