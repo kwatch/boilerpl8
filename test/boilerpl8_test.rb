@@ -95,6 +95,18 @@ END
       end
     end
 
+    it "[!xr4c6] reports error when argument has no schema." do
+      pr = proc { Boilerpl8::MainApp.new.run("kwatch/hello-ruby", "helo") }
+      ok {pr}.raise?(Boilerpl8::CommandOptionError,
+                     "kwatch/hello-ruby: expected 'github:' or 'file:' schema.")
+    end
+
+    it "[!95h3f] reports error when argument has unknown schema." do
+      pr = proc { Boilerpl8::MainApp.new.run("gh:kwatch/hello-ruby", "helo") }
+      ok {pr}.raise?(Boilerpl8::CommandOptionError,
+                     "gh:kwatch/hello-ruby: unknown schema (expected 'github:' or 'file:').")
+    end
+
   end
 
 

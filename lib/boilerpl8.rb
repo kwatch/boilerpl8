@@ -133,11 +133,13 @@ module Boilerpl8
     end
 
     def self.create(boilerplate_name)
+      #; [!xr4c6] reports error when argument has no schema.
       boilerplate_name =~ /\A(\w+:)/  or
-        err("#{args[0]}: expected 'github:' or 'file:' schema.")
+        err("#{boilerplate_name}: expected 'github:' or 'file:' schema.")
       schema = $1
+      #; [!95h3f] reports error when argument has unknown schema.
       klass = ALL.find {|cls| cls.const_get(:SCHEMA) == schema }  or
-        err("#{args[0]}: unknown schema.")
+        err("#{boilerplate_name}: unknown schema (expected 'github:' or 'file:').")
       return klass.new()
     end
 
