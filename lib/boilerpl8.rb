@@ -240,9 +240,12 @@ module Boilerpl8
         return 0
       end
       #
-      ! args.empty?  or err("#{@script_name}: argument required.")
-      boilerplate_name = args[0]   # ex: "github:kwatch/hello-ruby"
-      target_dir       = args[1]   # ex: "mygem1"
+      boilerplate_name = args[0]  # ex: "github:kwatch/hello-ruby"
+      target_dir       = args[1]  # ex: "mygem1"
+      #; [!eqisx] reports error when boilerplate name or target dir is not specified.
+      boilerplate_name  or raise err("#{@script_name}: argument required.")
+      target_dir        or raise err("#{@script_name}: target directory name required.")
+      #
       op = Operation.create(boilerplate_name)
       op.do_everything(boilerplate_name, target_dir, options)
       return 0

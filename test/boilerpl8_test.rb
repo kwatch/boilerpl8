@@ -107,6 +107,16 @@ END
                      "gh:kwatch/hello-ruby: unknown schema (expected 'github:' or 'file:').")
     end
 
+    it "[!eqisx] reports error when boilerplate name or target dir is not specified." do
+      pr = proc { Boilerpl8::MainApp.new.run() }
+      ok {pr}.raise?(Boilerpl8::CommandOptionError,
+                     "boilerpl8_test.rb: argument required.")
+      #
+      pr = proc { Boilerpl8::MainApp.new.run("github:kwatch/hello-ruby") }
+      ok {pr}.raise?(Boilerpl8::CommandOptionError,
+                     "boilerpl8_test.rb: target directory name required.")
+    end
+
   end
 
 
