@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ###
-### $Release: 0.0.0 $
+### $Release: 0.2.0 $
 ### $Copyright: copyright(c) 2016 kuwata-lab.com all rights reserved $
 ### $License: MIT License $
 ###
@@ -14,7 +14,7 @@ require 'fileutils'
 module Boilerpl8
 
 
-  RELEASE = '$Release: 0.0.0 $'.split()[1]
+  RELEASE = '$Release: 0.2.0 $'.split()[1]
 
 
   module ShellHelper
