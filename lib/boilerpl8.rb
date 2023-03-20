@@ -18,26 +18,31 @@ module Boilerpl8
 
 
   module ShellHelper
+    PROMPT = "[boilerpl8]$"
+
+    def _prompt()
+      return PROMPT
+    end
 
     def rm_rf(path)
-      puts "$ rm -rf #{path}"
+      puts "#{_prompt()} rm -rf #{path}"
       FileUtils.rm_rf path
     end
 
     def mv(oldpath, newpath)
-      puts "$ mv #{oldpath} #{newpath}"
+      puts "#{_prompt()} mv #{oldpath} #{newpath}"
       File.rename oldpath, newpath
     end
 
     def sys(command)
-      puts "$ #{command}"
+      puts "#{_prompt()} #{command}"
       system command
     end
 
     def chdir(dir, &block)
-      puts "$ cd #{dir}"
+      puts "#{_prompt()} cd #{dir}"
       Dir.chdir(dir, &block)
-      puts "$ cd -"
+      puts "#{_prompt()} cd -"
     end
 
   end
