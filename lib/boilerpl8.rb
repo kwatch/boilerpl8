@@ -261,8 +261,8 @@ module Boilerpl8
 #{script} -- download boilerplate files
 
 Usage:
-  #{script} [options] github:<USER>/<REPO> <DIR>
-  #{script} [options] file:<PATH> <DIR>
+  #{script} [<options>] github:<USER>/<REPO> <DIR>
+  #{script} [<options>] file:<PATH> <DIR>
 
 Options:
 END

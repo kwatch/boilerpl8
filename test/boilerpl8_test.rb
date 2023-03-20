@@ -15,8 +15,8 @@ describe Boilerpl8::MainApp do
 #{File.basename(__FILE__)} -- download boilerplate files
 
 Usage:
-  boilerpl8_test.rb [options] github:<USER>/<REPO> <DIR>
-  boilerpl8_test.rb [options] file:<PATH> <DIR>
+  boilerpl8_test.rb [<options>] github:<USER>/<REPO> <DIR>
+  boilerpl8_test.rb [<options>] file:<PATH> <DIR>
 
 Options:
   -h, --help       :  help
