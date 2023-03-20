@@ -67,7 +67,8 @@ module Boilerpl8
       url, filename = resolve(boilerplate_name, options)
       filepath = download(url, filename)
       basedir = extract(filepath, target_dir)
-      kick_initializer(basedir)
+      ok = kick_initializer(basedir)
+      return ok    # true or false
     end
 
     protected
@@ -113,12 +114,10 @@ module Boilerpl8
     def kick_initializer(basedir)
       chdir(basedir) do
         INITIALIZER_SCRIPTS.each do |script, lang|
-          if File.exist?(script)
-            sys "#{lang} #{script}"
-            break
-          end
+          return sys "#{lang} #{script}" if File.exist?(script)
         end
       end
+      return true   # initializer script not exist
     end
 
     def err(msg)
@@ -219,8 +218,8 @@ module Boilerpl8
 
     def self.main
       begin
-        self.new.run(*ARGV)
-        exit 0
+        status = self.new.run(*ARGV)
+        exit status
       rescue CommandOptionError => ex
         $stderr.puts ex.message
         exit 1
@@ -252,8 +251,8 @@ module Boilerpl8
       target_dir        or raise err("#{@script_name}: target directory name required.")
       #
       op = Operation.create(boilerplate_name)
-      op.do_everything(boilerplate_name, target_dir, options)
-      return 0
+      ok = op.do_everything(boilerplate_name, target_dir, options)
+      return ok ? 0 : 1
     end
 
     def help_message
