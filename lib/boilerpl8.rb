@@ -79,7 +79,7 @@ module Boilerpl8
 
     def download(url, filename)
       print "Download from #{url} ..."
-      content = open(url) {|f| f.read }
+      content = URI.open(url) {|f| f.read }
       puts " done."
       File.open(filename, 'wb') {|f| f.write(content) }
       return filename
@@ -182,7 +182,7 @@ module Boilerpl8
       suffix = options['B'] ? "" : "-boilerpl8"
       api_url = "https://api.github.com/repos/#{user}/#{repo}#{suffix}/releases"
       begin
-        json_str = open(api_url) {|f| f.read }
+        json_str = URI.open(api_url) {|f| f.read }
       rescue OpenURI::HTTPError => ex
         hint = options['B'] \
              ? "confirm repository name, or try without '-B' option." \
