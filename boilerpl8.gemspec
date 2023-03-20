@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name            = 'boilerpl8'
-  spec.version         = '$Release: 0.2.0 $'.split()[1]
+  spec.version         = '$Release: 0.3.0 $'.split()[1]
   spec.author          = 'makoto kuwata'
   spec.email           = 'kwa@kuwata-lab.com'
   spec.platform        = Gem::Platform::RUBY
